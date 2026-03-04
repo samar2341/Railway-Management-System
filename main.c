@@ -1,7 +1,43 @@
-#include <stdio.h> // Standard I/O library
-#include <stdlib.h> // Standard library for memory allocation, process control, conversions, etc.
+#include <stdio.h>
+#include <stdlib.h>
 
-/* Function to book a ticket */
+void bookTicket();
+void viewTickets();
+void cancelTicket();
+
+int main() {
+    int choice;
+
+    do {
+        printf("\n RAILWAY MANAGEMENT SYSTEM\n");
+        printf("1. Book Ticket\n");
+        printf("2. View Tickets\n");
+        printf("3. Cancel Ticket\n");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                bookTicket();
+                break;
+            case 2:
+                viewTickets();
+                break;
+            case 3:
+                cancelTicket();
+                break;
+            case 4:
+                printf("Exiting Program...\n");
+                break;
+            default:
+                printf("Invalid choice!\n");
+        }
+    } while (choice != 4);
+
+    return 0;
+}
+
 void bookTicket() {
     FILE *fp;
     int ticketNo, seatNo;
@@ -28,10 +64,9 @@ void bookTicket() {
     fprintf(fp, "%d %s %s %d\n", ticketNo, name, train, seatNo);
     fclose(fp);
 
-    printf("\n✅ Ticket Booked Successfully!\n");
+    printf("\nTicket Booked Successfully!\n");
 }
 
-/* Function to view all tickets */
 void viewTickets() {
     FILE *fp;
     int ticketNo, seatNo;
@@ -43,7 +78,7 @@ void viewTickets() {
         return;
     }
 
-    printf("\n🎫 BOOKED TICKETS\n");
+    printf("\nBOOKED TICKETS\n");
     printf("----------------------------\n");
 
     while (fscanf(fp, "%d %s %s %d",
@@ -58,7 +93,6 @@ void viewTickets() {
     fclose(fp);
 }
 
-/* Function to cancel a ticket */
 void cancelTicket() {
     FILE *fp, *temp;
     int ticketNo, seatNo, cancelNo, found = 0;
@@ -92,41 +126,7 @@ void cancelTicket() {
     rename("temp.txt", "tickets.txt");
 
     if (found)
-        printf("\n❌ Ticket Cancelled Successfully!\n");
+        printf("\nTicket Cancelled Successfully!\n");
     else
         printf("\nTicket not found!\n");
-}
-
-/* Main function */
-int main() {
-    int choice;
-
-    do {
-        printf("\n RAILWAY MANAGEMENT SYSTEM\n");
-        printf("1. Book Ticket\n");
-        printf("2. View Tickets\n");
-        printf("3. Cancel Ticket\n");
-        printf("4. Exit\n");
-        printf("Enter your choice: ");
-        scanf("%d", &choice);
-
-        switch (choice) {
-            case 1:
-                bookTicket();
-                break;
-            case 2:
-                viewTickets();
-                break;
-            case 3:
-                cancelTicket();
-                break;
-            case 4:
-                printf("👋 Exiting Program...\n");
-                break;
-            default:
-                printf("Invalid choice!\n");
-        }
-    } while (choice != 4);
-
-    return 0;
 }
