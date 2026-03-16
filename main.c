@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #define MAX_SEATS 50
 #define TICKET_FILE "tickets.txt"
@@ -28,7 +29,7 @@ struct Ticket {
 
 char seat_map[MAX_SEATS + 1];
 
-void clearScreen();
+void line();
 void loadSeatMap(int train_id);
 int generateBookingID();
 int isWindowSeat(int seat);
@@ -57,7 +58,7 @@ int main() {
 
     do {
         printf("\n=============================================\n");
-        printf("      RAILWAY MANAGEMENT SYSTEM\n");
+        printf("      Train Seat Allocation System\n");
         printf("=============================================\n");
         printf("1. View All Trains\n");
         printf("2. Search Train\n");
@@ -66,16 +67,16 @@ int main() {
         printf("5. Cancel Ticket\n");
         printf("6. View Seat Map\n");
         printf("7. Exit\n");
-        printf("Enter choice: ");
+        printf("\nEnter choice: ");
         scanf("%d",&choice);
 
         switch(choice) {
-            case 1: viewTrains(); break;
-            case 2: searchTrain(); break;
-            case 3: bookTicket(); break;
-            case 4: viewBookings(); break;
-            case 5: cancelTicket(); break;
-            case 6: showSeatMap(); break;
+            case 1: viewTrains(); sleep(2); break;
+            case 2: searchTrain(); sleep(2); break;
+            case 3: bookTicket(); sleep(2); break;
+            case 4: viewBookings(); sleep(2); break;
+            case 5: cancelTicket(); sleep(2); break;
+            case 6: showSeatMap(); sleep(2); break;
             case 7: printf("\nThank you.\n"); break;
             default: printf("Invalid choice.\n");
         }
@@ -84,7 +85,7 @@ int main() {
     return 0;
 }
 
-void clearScreen() {
+void line() {
     printf("\n--------------------------------------------------\n");
 }
 
@@ -108,6 +109,7 @@ void loadSeatMap(int train_id) {
         }
     }
     fclose(fp);
+    printf("Processing.....\n");
 }
 
 int generateBookingID() {
@@ -118,6 +120,7 @@ int generateBookingID() {
     while(fgets(line,sizeof(line),fp)) count++;
     fclose(fp);
     return count;
+    printf("Processing.....\n");
 }
 
 int isWindowSeat(int seat) {
@@ -156,7 +159,7 @@ int allocateSeat(char gender,int age) {
 
 void viewTrains() {
     int i;
-    clearScreen();
+    line();
     printf("ID   Name                 From       To         Fare   Dep\n");
     for(i=0;i<trainCount;i++) {
         printf("%-4d %-20s %-10s %-10s %-6.0f %s\n",
@@ -164,6 +167,8 @@ void viewTrains() {
             trains[i].from,trains[i].to,
             trains[i].fare,trains[i].departure);
     }
+    line();
+    printf("Processing.....\n");
 }
 
 struct Train* findTrain(int id) {
@@ -222,7 +227,21 @@ void bookTicket() {
         t.status,t.emergency_contact);
     fclose(fp);
 
-    printf("\nTicket Confirmed. Seat No: %d\n",t.seat_number);
+
+    printf("\nTicket Confirmed!\n");
+
+    printf("\n====================================\n");
+    printf("           TRAIN TICKET\n");
+    printf("====================================\n");
+    printf("Booking ID : %d\n",t.booking_id);
+    printf("Passenger  : %s\n",t.passenger_name);
+    printf("Age        : %d\n",t.age);
+    printf("Gender     : %c\n",t.gender);
+    printf("Train ID   : %d\n",t.train_id);
+    printf("Seat No    : %d\n",t.seat_number);
+    printf("Status     : %s\n",t.status);
+    printf("====================================\n");
+    printf("Processing.....\n");
 }
 
 void viewBookings() {
@@ -243,6 +262,7 @@ void viewBookings() {
             t.train_id,t.seat_number,t.status);
     }
     fclose(fp);
+    printf("Processing.....\n");
 }
 
 void cancelTicket() {
@@ -281,6 +301,7 @@ void cancelTicket() {
 
     if(found) printf("Ticket Cancelled.\n");
     else printf("Booking ID not found.\n");
+    printf("Processing.....");
 }
 
 void searchTrain() {
@@ -302,6 +323,7 @@ void searchTrain() {
     }
 
     if(!found) printf("No train found.\n");
+    printf("Processing.....");
 }
 
 void showSeatMap() {
@@ -322,4 +344,5 @@ void showSeatMap() {
         if(i%10==0) printf("\n");
     }
     printf("\n");
+    printf("Processing.....\n");
 }
