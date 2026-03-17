@@ -40,7 +40,7 @@ void loadSeatMap(int train_id);
 int generateBookingID();
 int isWindowSeat(int seat);
 int isSandwiched(int seat);
-int allocateSeat(char gender, int age);
+int allocateSeat(char gender, int age, int want_window);
 struct Train* findTrain(int id);
 
 struct Train trains[5] = {
@@ -140,8 +140,17 @@ int isSandwiched(int seat) {
     return(leftF && rightF);
 }
 
-int allocateSeat(char gender,int age) {
+int allocateSeat(char gender,int age,int want_window) {
     int seat;
+
+    if(want_window==1) {
+        for(seat=1;seat<=MAX_SEATS;seat++) {
+            if(seat_map[seat]=='0' && isWindowSeat(seat)) {
+                if(gender=='M' && isSandwiched(seat)) continue;
+                return seat;
+            }
+        }
+    }
 
     if(age<12) {
         for(seat=1;seat<=10;seat++)
@@ -185,6 +194,7 @@ struct Train* findTrain(int id) {
 void bookTicket() {
     int train_id;
     struct Ticket t;
+    int want_window;
 
     viewTrains();
     printf("\nEnter Train ID: ");
@@ -216,8 +226,11 @@ void bookTicket() {
         strcpy(t.emergency_contact,"N/A");
     }
 
+    printf("Window seat required (1/0): ");
+    scanf("%d",&want_window);
+
     loadSeatMap(train_id);
-    t.seat_number=allocateSeat(t.gender,t.age);
+    t.seat_number=allocateSeat(t.gender,t.age,want_window);
 
     if(t.seat_number==-1) {
         printf("No seats available.\n");
@@ -230,7 +243,6 @@ void bookTicket() {
         t.age,t.gender,t.seat_number,
         t.status,t.emergency_contact);
     fclose(fp);
-
 
     printf("\nTicket Confirmed!\n");
 
@@ -245,7 +257,6 @@ void bookTicket() {
     printf("Seat No    : %d\n",t.seat_number);
     printf("Status     : %s\n",t.status);
     printf("====================================\n");
-    printf("Processing.....\n");
 }
 
 void viewBookings() {
