@@ -30,18 +30,18 @@ struct Ticket {
 char seat_map[MAX_SEATS + 1];
 
 void line();
-void loadSeatMap(int train_id);
-int generateBookingID();
-int isWindowSeat(int seat);
-int isSandwiched(int seat);
-int allocateSeat(char gender, int age);
 void viewTrains();
-struct Train* findTrain(int id);
 void bookTicket();
 void viewBookings();
 void cancelTicket();
 void searchTrain();
 void showSeatMap();
+void loadSeatMap(int train_id);
+int generateBookingID();
+int isWindowSeat(int seat);
+int isSandwiched(int seat);
+int allocateSeat(char gender, int age);
+struct Train* findTrain(int id);
 
 struct Train trains[5] = {
     {101,"Rajdhani Express","Delhi","Mumbai",50,850.0,"06:00"},
@@ -57,9 +57,13 @@ int main() {
     int choice;
 
     do {
+        printf("\n");
         printf("\n=============================================\n");
+        printf("\n");
         printf("      Train Seat Allocation System\n");
+        printf("\n");
         printf("=============================================\n");
+        printf("\n");
         printf("1. View All Trains\n");
         printf("2. Search Train\n");
         printf("3. Book Ticket\n");
