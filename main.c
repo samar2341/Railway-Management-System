@@ -133,11 +133,14 @@ int isWindowSeat(int seat) {
 
 int isSandwiched(int seat) {
     if(seat<=1 || seat>=MAX_SEATS) return 0;
-    char left=seat_map[seat-1];
-    char right=seat_map[seat+1];
-    int leftF=(left=='F'||left=='C');
-    int rightF=(right=='F'||right=='C');
-    return(leftF && rightF);
+
+    char left = seat_map[seat-1];
+    char right = seat_map[seat+1];
+
+    if(left!='0' && right!='0')
+        return 1;
+
+    return 0;
 }
 
 int allocateSeat(char gender,int age,int want_window) {
@@ -145,10 +148,15 @@ int allocateSeat(char gender,int age,int want_window) {
 
     if(want_window==1) {
         for(seat=1;seat<=MAX_SEATS;seat++) {
-            if(seat_map[seat]=='0' && isWindowSeat(seat)) {
-                if(gender=='M' && isSandwiched(seat)) continue;
+            if(seat_map[seat]=='0' && isWindowSeat(seat))
                 return seat;
-            }
+        }
+    }
+
+    if(want_window==0) {
+        for(seat=1;seat<=MAX_SEATS;seat++) {
+            if(seat_map[seat]=='0' && !isWindowSeat(seat))
+                return seat;
         }
     }
 
@@ -157,7 +165,7 @@ int allocateSeat(char gender,int age,int want_window) {
             if(seat_map[seat]=='0') return seat;
     }
 
-    if(gender=='F') {
+    if(gender=='F' || gender=='C') {
         for(seat=1;seat<=MAX_SEATS;seat++)
             if(seat_map[seat]=='0') return seat;
     }
@@ -165,6 +173,9 @@ int allocateSeat(char gender,int age,int want_window) {
     if(gender=='M') {
         for(seat=1;seat<=MAX_SEATS;seat++)
             if(seat_map[seat]=='0' && !isSandwiched(seat)) return seat;
+
+        for(seat=1;seat<=MAX_SEATS;seat++)
+            if(seat_map[seat]=='0') return seat;
     }
 
     return -1;
@@ -257,6 +268,7 @@ void bookTicket() {
     printf("Seat No    : %d\n",t.seat_number);
     printf("Status     : %s\n",t.status);
     printf("====================================\n");
+    printf("Processing....");
 }
 
 void viewBookings() {
